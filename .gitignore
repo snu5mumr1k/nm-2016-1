@@ -27,7 +27,7 @@
 *.exe
 *.out
 *.app
-./bin/*
+bin/*
 
 # swp files
 *.swp
