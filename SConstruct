@@ -21,6 +21,7 @@ def make_object(source):
 objects = [make_object(source) for source in [
     "src/matrix.cpp",
     "src/vector.cpp",
+    "src/utils.cpp",
 ]]
 
 env.Program("bin/main", objects + make_object("src/main.cpp"), FRAMEWORKS=frameworks, LIBS=libs)
