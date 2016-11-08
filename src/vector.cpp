@@ -16,6 +16,10 @@ Vector::Vector(int n, const double *elements) :
     memcpy(elements_, elements, n * sizeof *elements_);
 }
 
+Vector::Vector(const Vector &v) :
+    Vector(v.n_, v.elements_)
+{}
+
 Vector::~Vector() {
     delete elements_;
 }

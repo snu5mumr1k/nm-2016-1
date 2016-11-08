@@ -4,6 +4,7 @@ class Vector {
 public:
     Vector(int n);
     Vector(int n, const double *elements);
+    Vector(const Vector &v);
 
     ~Vector();
 
