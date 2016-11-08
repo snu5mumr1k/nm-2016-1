@@ -1,4 +1,5 @@
 #include <utils.h>
+#include <cmath>
 
 bool Equal(double a, double b) {
     return fabs(a - b) < EPS;
