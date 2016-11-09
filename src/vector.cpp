@@ -21,7 +21,7 @@ Vector::Vector(const Vector &v) :
 {}
 
 Vector::~Vector() {
-    delete elements_;
+    delete [] elements_;
 }
 
 double Vector::operator [](int i) const {
