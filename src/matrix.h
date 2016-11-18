@@ -3,7 +3,7 @@
 #include <element_generator.h>
 #include <vector.h>
 
-enum : bool {
+enum Pivoting : bool {
     USE_PIVOTING = true,
     DONT_USE_PIVOTING = false,
 };
@@ -26,9 +26,9 @@ public:
     void MultiplyRow(int i, double multiplier);
     void AddRow(int dest, int src, double multiplier);
 
-    double Determinant(bool use_pivoting = false);
-    Vector Solve(Vector v, bool use_pivoting = false);
-    Matrix Inverse(bool use_pivoting = false);
+    double Determinant(Pivoting use_pivoting = DONT_USE_PIVOTING);
+    Vector Solve(Vector v, Pivoting use_pivoting = DONT_USE_PIVOTING);
+    Matrix Inverse(Pivoting use_pivoting = DONT_USE_PIVOTING);
 
     const double *operator [](int i) const;
     bool OutOfRange(int i) const;

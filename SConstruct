@@ -20,7 +20,7 @@ def make_object(source):
 
 objects = [make_object(source) for source in [
     "src/matrix.cpp",
-    "src/system.cpp",
+    "src/equations_system.cpp",
     "src/utils.cpp",
     "src/vector.cpp",
     "src/element_generator.cpp",

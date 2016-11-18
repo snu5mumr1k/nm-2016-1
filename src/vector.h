@@ -1,9 +1,12 @@
 #pragma once
 
+#include <element_generator.h>
+
 class Vector {
 public:
     Vector(int n);
     Vector(int n, const double *elements);
+    Vector(int n, const BaseElementGenerator &element_generator);
     Vector(const Vector &v);
 
     ~Vector();

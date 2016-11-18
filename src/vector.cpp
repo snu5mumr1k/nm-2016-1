@@ -17,6 +17,16 @@ Vector::Vector(int n, const double *elements) :
     memcpy(elements_, elements, n * sizeof *elements_);
 }
 
+Vector::Vector(int n, const BaseElementGenerator &element_generator) :
+    n_(n)
+{
+    elements_ = new double[n];
+
+    for (int i = 0; i < n; ++i) {
+        elements_[i] = element_generator.GetElem(i);
+    }
+}
+
 Vector::Vector(const Vector &v) :
     Vector(v.n_, v.elements_)
 {}

@@ -99,7 +99,7 @@ void Matrix::AddRow(int dest, int src, double multiplier) {
     }
 }
 
-double Matrix::Determinant(bool use_pivoting) {
+double Matrix::Determinant(Pivoting use_pivoting) {
     Vector tmp(n_);
 
     if (use_pivoting) {
@@ -109,7 +109,7 @@ double Matrix::Determinant(bool use_pivoting) {
     return GaussianElimination(tmp);
 }
 
-Vector Matrix::Solve(Vector v, bool use_pivoting) {
+Vector Matrix::Solve(Vector v, Pivoting use_pivoting) {
     if (use_pivoting) {
         GaussianEliminationWithPivoting(v);
     } else {
@@ -119,7 +119,7 @@ Vector Matrix::Solve(Vector v, bool use_pivoting) {
     return v;
 }
 
-Matrix Matrix::Inverse(bool use_pivoting) {
+Matrix Matrix::Inverse(Pivoting use_pivoting) {
     Matrix result(n_);
 
     if (use_pivoting) {
