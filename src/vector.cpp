@@ -71,16 +71,16 @@ void Vector::AddRow(int dest, int src, double coef) {
 }
 
 double Vector::operator [](int i) const {
-    if (i < 0 || i >= n_) {
-        throw std::runtime_error("index in vector operator [] is out of bounds");
+    if (OutOfRange(i)) {
+        throw std::runtime_error("Vector index is out of range");
     }
 
     return elements_[i];
 }
 
 double &Vector::operator [](int i) {
-    if (i < 0 || i >= n_) {
-        throw std::runtime_error("index in vector operator [] is out of bounds");
+    if (OutOfRange(i)) {
+        throw std::runtime_error("Vector index is out of range");
     }
 
     return elements_[i];
