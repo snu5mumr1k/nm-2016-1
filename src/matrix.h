@@ -1,5 +1,6 @@
 #pragma once
 
+#include <base_right_part.h>
 #include <element_generator.h>
 #include <vector.h>
 
@@ -8,7 +9,7 @@ enum Pivoting : bool {
     DONT_USE_PIVOTING = false,
 };
 
-class Matrix {
+class Matrix : BaseRightEquationsSystemPart {
 public:
     Matrix(int n);
     Matrix(int n, const double *elements);
@@ -37,9 +38,8 @@ private:
     int n_;
     double *elements_;
 
-    template <typename T>
-    double GaussianElimination(T &right_part);
+    int ChooseRow(int curr_row, Pivoting use_pivoting = DONT_USE_PIVOTING);
 
-    template <typename T>
-    double GaussianEliminationWithPivoting(T &right_part);
+    double GaussianElimination(BaseRightEquationsSystemPart &right_part,
+        Pivoting use_pivoting = DONT_USE_PIVOTING);
 };

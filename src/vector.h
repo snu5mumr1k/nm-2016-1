@@ -1,8 +1,9 @@
 #pragma once
 
+#include <base_right_part.h>
 #include <element_generator.h>
 
-class Vector {
+class Vector : public BaseRightEquationsSystemPart {
 public:
     Vector(int n);
     Vector(int n, const double *elements);

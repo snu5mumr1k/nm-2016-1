@@ -102,19 +102,11 @@ void Matrix::AddRow(int dest, int src, double multiplier) {
 double Matrix::Determinant(Pivoting use_pivoting) {
     Vector tmp(n_);
 
-    if (use_pivoting) {
-        return GaussianEliminationWithPivoting(tmp);
-    }
-
-    return GaussianElimination(tmp);
+    return GaussianElimination(tmp, use_pivoting);
 }
 
 Vector Matrix::Solve(Vector v, Pivoting use_pivoting) {
-    if (use_pivoting) {
-        GaussianEliminationWithPivoting(v);
-    } else {
-        GaussianElimination(v);
-    }
+    GaussianElimination(v, use_pivoting);
 
     return v;
 }
@@ -122,11 +114,7 @@ Vector Matrix::Solve(Vector v, Pivoting use_pivoting) {
 Matrix Matrix::Inverse(Pivoting use_pivoting) {
     Matrix result(n_);
 
-    if (use_pivoting) {
-        GaussianEliminationWithPivoting(result);
-    } else {
-        GaussianElimination(result);
-    }
+    GaussianElimination(result, use_pivoting);
 
     return result;
 }
@@ -139,69 +127,42 @@ const double *Matrix::operator [](int i) const {
     return &elements_[i * n_];
 }
 
-template <typename T>
-double Matrix::GaussianElimination(T &right_part) {
-    if (right_part.Size() != n_) {
-        throw std::runtime_error("Parts sizes dont match");
-    }
-
-    double determinant = 1.0;
-    for (int i = 0; i < n_; ++i) {
-        for (int j = i; j < n_; ++j) {
-            if (!Zero(elements_[j * n_ + i])) {
-                if (i != j) {
-                    SwapRows(i, j);
-                    right_part.SwapRows(i, j);
-                    determinant = -determinant;
-                }
-                break;
-            }
-        }
-
-        if (Zero(elements_[i * n_ + i])) {
-            throw std::runtime_error("Matrix is singular");
-        }
-
-        double coef = 1.0 / elements_[i * n_ + i];
-        MultiplyRow(i, coef);
-        right_part.MultiplyRow(i, coef);
-        determinant /= coef;
-        for (int j = 0; j < n_; ++j) {
-            if (i == j) {
-                continue;
-            }
-            double coef = -elements_[j * n_ + i];
-            AddRow(j, i, coef);
-            right_part.AddRow(j, i, coef);
-        }
-    }
-
-    return determinant;
-}
-
-template <typename T>
-double Matrix::GaussianEliminationWithPivoting(T &right_part) {
-    if (right_part.Size() != n_) {
-        throw std::runtime_error("Parts sizes dont match");
-    }
-
-    double determinant = 1.0;
-    for (int i = 0; i < n_; ++i) {
-        int max_index = i;
-        for (int j = i; j < n_; ++j) {
-            if (fabs(elements_[max_index * n_ + i]) < fabs(elements_[j * n_ + i])) {
+int Matrix::ChooseRow(int curr_row, Pivoting use_pivoting) {
+    if (use_pivoting) {
+        int max_index = curr_row;
+        for (int j = curr_row; j < n_; ++j) {
+            if (fabs(elements_[max_index * n_ + curr_row]) < fabs(elements_[j * n_ + curr_row])) {
                 max_index = j;
             }
         }
+        return max_index;
+    } else {
+        for (int j = curr_row; j < n_; ++j) {
+            if (!Zero(elements_[j * n_ + curr_row])) {
+                return j;
+            }
+        }
+    }
 
-        if (i != max_index) {
+    return curr_row;
+}
+
+double Matrix::GaussianElimination(BaseRightEquationsSystemPart &right_part, Pivoting use_pivoting) {
+    if (right_part.Size() != n_) {
+        throw std::runtime_error("Parts sizes dont match");
+    }
+
+    double determinant = 1.0;
+    for (int i = 0; i < n_; ++i) {
+        int row = ChooseRow(i, use_pivoting);
+        if (i != row) {
             determinant = -determinant;
-            SwapRows(i, max_index);
-            right_part.SwapRows(i, max_index);
+            SwapRows(i, row);
+            right_part.SwapRows(i, row);
         }
 
         if (Zero(elements_[i * n_ + i])) {
-            throw std::runtime_error("Matrix is singular");
+            return 0.0;
         }
 
         double coef = 1.0 / elements_[i * n_ + i];
