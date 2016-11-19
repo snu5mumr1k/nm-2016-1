@@ -9,7 +9,7 @@ enum Pivoting : bool {
     DONT_USE_PIVOTING = false,
 };
 
-class Matrix : BaseRightEquationsSystemPart {
+class Matrix : public BaseRightEquationsSystemPart {
 public:
     Matrix(int n);
     Matrix(int n, const double *elements);
