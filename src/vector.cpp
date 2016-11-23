@@ -1,6 +1,5 @@
 #include <cmath>
 #include <cstring>
-#include <iostream>
 #include <stdexcept>
 #include <vector.h>
 
@@ -36,11 +35,11 @@ Vector::~Vector() {
     delete [] elements_;
 }
 
-void Vector::Print() const {
+void Vector::Print(std::ofstream &fout) const {
     for (int i = 0; i < n_; ++i) {
-        std::cout << elements_[i] << ' ';
+        fout << elements_[i] << ' ';
     }
-    std::cout << std::endl;
+    fout << std::endl;
 }
 
 int Vector::Size() const {
@@ -75,6 +74,16 @@ void Vector::AddRow(int dest, int src, double coef) {
     }
 
     elements_[dest] += coef * elements_[src];
+}
+
+double Vector::EuclideanNorm() const {
+    double norm = 0.0;
+
+    for (int i = 0; i < n_; ++i) {
+        norm += elements_[i] * elements_[i];
+    }
+
+    return norm;
 }
 
 double Vector::operator [](int i) const {

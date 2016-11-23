@@ -2,6 +2,7 @@
 
 #include <base_right_part.h>
 #include <element_generator.h>
+#include <fstream>
 #include <vector.h>
 
 enum Pivoting : bool {
@@ -20,7 +21,7 @@ public:
 
     Matrix &operator =(const Matrix &other);
 
-    void Print() const;
+    void Print(std::ofstream &fout) const;
     int Size() const;
 
     void SetNaN();

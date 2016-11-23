@@ -1,6 +1,5 @@
 #include <cmath>
 #include <cstring>
-#include <iostream>
 #include <matrix.h>
 #include <stdexcept>
 #include <utils.h>
@@ -56,14 +55,13 @@ Matrix &Matrix::operator =(const Matrix &other) {
     return *this;
 }
 
-void Matrix::Print() const {
+void Matrix::Print(std::ofstream &fout) const {
     for (int i = 0; i < n_; ++i) {
         for (int j = 0; j < n_; ++j) {
-            std::cout << elements_[i * n_ + j] << ' ';
+            fout << elements_[i * n_ + j] << ' ';
         }
-        std::cout << std::endl;
+        fout << std::endl;
     }
-    std::cout << std::endl;
 }
 
 int Matrix::Size() const {

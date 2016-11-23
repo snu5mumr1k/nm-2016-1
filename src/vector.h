@@ -2,6 +2,7 @@
 
 #include <base_right_part.h>
 #include <element_generator.h>
+#include <fstream>
 
 class Vector : public BaseRightEquationsSystemPart {
 public:
@@ -12,13 +13,15 @@ public:
 
     ~Vector();
 
-    void Print() const;
+    void Print(std::ofstream &fout) const;
     int Size() const;
 
     void SetNaN();
     void MultiplyRow(int i, double multiplier);
     void SwapRows(int i, int j);
     void AddRow(int dest, int src, double coef);
+
+    double EuclideanNorm() const;
 
     double operator [](int i) const;
     double &operator [](int i);
