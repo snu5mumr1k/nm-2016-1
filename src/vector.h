@@ -25,6 +25,15 @@ public:
 
     bool OutOfRange(int i) const;
 
+    Vector operator +();
+    Vector operator -();
+
+    Vector operator +=(const Vector &other);
+    Vector operator +(const Vector &other);
+
+    Vector operator -=(const Vector &other);
+    Vector operator -(const Vector &other);
+
 private:
     int n_;
     double *elements_;
