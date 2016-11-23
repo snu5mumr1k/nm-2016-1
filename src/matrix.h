@@ -35,6 +35,21 @@ public:
     const double *operator [](int i) const;
     bool OutOfRange(int i) const;
 
+    Matrix operator - ();
+    Matrix operator + ();
+
+    Matrix operator += (const Matrix &other);
+    Matrix operator + (const Matrix &other);
+
+    Matrix operator *= (const Matrix &other);
+    Matrix operator * (const Matrix &other);
+
+    Matrix operator *= (const Vector &other);
+    Matrix operator * (const Vector &other);
+
+    Matrix operator -= (const Matrix &other);
+    Matrix operator - (const Matrix &other);
+
 private:
     int n_;
     double *elements_;

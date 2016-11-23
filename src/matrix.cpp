@@ -1,5 +1,5 @@
-#include <cstring>
 #include <cmath>
+#include <cstring>
 #include <iostream>
 #include <matrix.h>
 #include <stdexcept>
@@ -193,3 +193,79 @@ double Matrix::GaussianElimination(BaseRightEquationsSystemPart &right_part, Piv
 bool Matrix::OutOfRange(int i) const {
     return i < 0 || i >= n_;
 }
+
+Matrix Matrix::operator +()
+{}
+
+Matrix Matrix::operator -() {
+    for (int i = 0; i < n_; ++i) {
+        elements_[i] = -elements_[i];
+    }
+}
+
+Matrix Matrix::operator +=(const Matrix &other) {
+    if (n_ != other.n_) {
+        throw std::runtime_error("Matrices sizes don't match");
+    }
+
+    for (int i = 0; i < n_ * n_; ++i) {
+        elements_[i] += other.elements_[i];
+    }
+
+    return *this;
+}
+
+Matrix Matrix::operator -=(const Matrix &other) {
+    if (n_ != other.n_) {
+        throw std::runtime_error("Matrices sizes don't match");
+    }
+
+    for (int i = 0; i < n_ * n_; ++i) {
+        elements_[i] -= other.elements_[i];
+    }
+
+    return *this;
+}
+
+Matrix Matrix::operator *=(const Matrix &other) {
+    if (n_ != other.n_) {
+        throw std::runtime_error("Matrices sizes don't match");
+    }
+
+    *this = *this * other;
+
+    return *this;
+}
+
+Matrix Matrix::operator +(const Matrix &other) {
+    Matrix tmp(*this);
+
+    tmp += other;
+    return tmp;
+}
+
+Matrix Matrix::operator -(const Matrix &other) {
+    Matrix tmp(*this);
+
+    tmp -= other;
+    return tmp;
+}
+
+Matrix Matrix::operator *(const Matrix &other) {
+    if (n_ != other.n_) {
+        throw std::runtime_error("Matrices sizes don't match");
+    }
+
+    Matrix tmp(n_);
+    for (int i = 0; i < n_; ++i) {
+        for (int j = 0; j < n_; ++j) {
+            tmp.elements_[i * n_ + j] = 0.0;
+            for (int k = 0; k < n_; ++k) {
+                tmp.elements_[i * n_ + j] += elements_[i * n_ + k] * other.elements_[k * n_ + j];
+            }
+        }
+    }
+
+    return tmp;
+}
+
