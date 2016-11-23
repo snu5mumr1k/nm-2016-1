@@ -22,6 +22,7 @@ objects = [make_object(source) for source in [
     "src/base_right_part.cpp",
     "src/element_generator.cpp",
     "src/equations_system.cpp",
+    "src/operations_counter.cpp",
     "src/matrix.cpp",
     "src/utils.cpp",
     "src/vector.cpp",

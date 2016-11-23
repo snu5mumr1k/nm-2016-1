@@ -44,3 +44,9 @@ double EquationsSystem::Determinant(Pivoting use_pivoting) const {
 
     return tmp.Determinant(use_pivoting);
 }
+
+Matrix EquationsSystem::Inverse(Pivoting use_pivoting) const {
+    Matrix tmp(*coefficients_);
+
+    return tmp.Inverse(use_pivoting);
+}
