@@ -39,6 +39,14 @@ Vector EquationsSystem::Solve(Pivoting use_pivoting) const {
     return tmp.Solve(*constants_, use_pivoting);
 }
 
+double EquationsSystem::Residual(Pivoting use_pivoting) const {
+    Vector result = Solve();
+
+    Vector residual_vector = *coefficients_ * result - *constants_;
+
+    return residual_vector.EuclideanNorm();
+}
+
 double EquationsSystem::Determinant(Pivoting use_pivoting) const {
     Matrix tmp(*coefficients_);
 

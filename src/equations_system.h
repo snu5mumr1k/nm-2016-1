@@ -13,6 +13,7 @@ public:
     ~EquationsSystem();
 
     Vector Solve(Pivoting use_pivoting = DONT_USE_PIVOTING) const;
+    double Residual(Pivoting use_pivoting = DONT_USE_PIVOTING) const;
     double Determinant(Pivoting use_pivoting = DONT_USE_PIVOTING) const;
     Matrix Inverse(Pivoting use_pivoting = DONT_USE_PIVOTING) const;
 
