@@ -28,7 +28,7 @@ public:
     void AddRow(int dest, int src, double multiplier);
 
     double Determinant(Pivoting use_pivoting = DONT_USE_PIVOTING);
-    Vector Solve(Vector v, Pivoting use_pivoting = DONT_USE_PIVOTING);
+    Vector Solve(const Vector &v, Pivoting use_pivoting = DONT_USE_PIVOTING);
     Matrix Inverse(Pivoting use_pivoting = DONT_USE_PIVOTING);
 
     const double *operator [](int i) const;

@@ -105,10 +105,11 @@ double Matrix::Determinant(Pivoting use_pivoting) {
     return GaussianElimination(tmp, use_pivoting);
 }
 
-Vector Matrix::Solve(Vector v, Pivoting use_pivoting) {
-    GaussianElimination(v, use_pivoting);
+Vector Matrix::Solve(const Vector &v, Pivoting use_pivoting) {
+    Vector result(v);
+    GaussianElimination(result, use_pivoting);
 
-    return v;
+    return result;
 }
 
 Matrix Matrix::Inverse(Pivoting use_pivoting) {
