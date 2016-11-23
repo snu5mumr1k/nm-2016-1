@@ -16,11 +16,15 @@ ElementGenerator::ElementGenerator(int m, double x) :
 {}
 
 double ElementGenerator::GetElem(int i) const {
+    i++;
+
     return x_ * exp(x_ / i) * cos (x_ / i);
 }
 
 double ElementGenerator::GetElem(int i, int j) const {
     static const double Q = 1.001 - 2 * m_ * 0.001;
+    i++;
+    j++;
 
     if (i == j) {
         return pow(Q - 1, i + j);
