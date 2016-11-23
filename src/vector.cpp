@@ -1,3 +1,4 @@
+#include <cmath>
 #include <cstring>
 #include <iostream>
 #include <stdexcept>
@@ -44,6 +45,12 @@ void Vector::Print() const {
 
 int Vector::Size() const {
     return n_;
+}
+
+void Vector::SetNaN() {
+    for (int i = 0; i < n_; ++i) {
+        elements_[i] = std::nan("");
+    }
 }
 
 void Vector::MultiplyRow(int i, double multiplier) {

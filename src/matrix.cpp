@@ -70,6 +70,12 @@ int Matrix::Size() const {
     return n_;
 }
 
+void Matrix::SetNaN() {
+    for (int i = 0; i < n_ * n_; ++i) {
+        elements_[i] = std::nan("");
+    }
+}
+
 void Matrix::SwapRows(int i, int j) {
     if (OutOfRange(i) || OutOfRange(j)) {
         throw std::runtime_error("Matrix index is out of bounds");
@@ -163,6 +169,7 @@ double Matrix::GaussianElimination(BaseRightEquationsSystemPart &right_part, Piv
         }
 
         if (Zero(elements_[i * n_ + i])) {
+            right_part.SetNaN();
             return 0.0;
         }
 

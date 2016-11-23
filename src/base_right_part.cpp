@@ -1,5 +1,8 @@
 #include <base_right_part.h>
 
+void BaseRightEquationsSystemPart::SetNaN()
+{}
+
 void BaseRightEquationsSystemPart::SwapRows(int i, int j)
 {}
 

@@ -15,6 +15,7 @@ public:
     void Print() const;
     int Size() const;
 
+    void SetNaN();
     void MultiplyRow(int i, double multiplier);
     void SwapRows(int i, int j);
     void AddRow(int dest, int src, double coef);
