@@ -205,7 +205,7 @@ Matrix Matrix::operator -() {
 
 Matrix Matrix::operator +=(const Matrix &other) {
     if (n_ != other.n_) {
-        throw std::runtime_error("Matrices sizes don't match");
+        throw std::runtime_error("Matrices sizes dont match");
     }
 
     for (int i = 0; i < n_ * n_; ++i) {
@@ -217,7 +217,7 @@ Matrix Matrix::operator +=(const Matrix &other) {
 
 Matrix Matrix::operator -=(const Matrix &other) {
     if (n_ != other.n_) {
-        throw std::runtime_error("Matrices sizes don't match");
+        throw std::runtime_error("Matrices sizes dont match");
     }
 
     for (int i = 0; i < n_ * n_; ++i) {
@@ -229,7 +229,7 @@ Matrix Matrix::operator -=(const Matrix &other) {
 
 Matrix Matrix::operator *=(const Matrix &other) {
     if (n_ != other.n_) {
-        throw std::runtime_error("Matrices sizes don't match");
+        throw std::runtime_error("Matrices sizes dont match");
     }
 
     *this = *this * other;
@@ -253,7 +253,7 @@ Matrix Matrix::operator -(const Matrix &other) {
 
 Matrix Matrix::operator *(const Matrix &other) {
     if (n_ != other.n_) {
-        throw std::runtime_error("Matrices sizes don't match");
+        throw std::runtime_error("Matrices sizes dont match");
     }
 
     Matrix tmp(n_);
@@ -269,3 +269,17 @@ Matrix Matrix::operator *(const Matrix &other) {
     return tmp;
 }
 
+Vector Matrix::operator *(const Vector &other) {
+    if (n_ != other.Size()) {
+        throw std::runtime_error("Matrix and vector sizes dont match");
+    }
+
+    Vector tmp(n_);
+    for (int i = 0; i < n_; ++i) {
+        tmp[i] = 0.0;
+        for (int j = 0; j < n_; ++j) {
+            tmp[i] += elements_[i * n_ + j] * other[j];
+        }
+    }
+    return tmp;
+}

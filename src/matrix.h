@@ -35,8 +35,8 @@ public:
     const double *operator [](int i) const;
     bool OutOfRange(int i) const;
 
-    Matrix operator - ();
     Matrix operator + ();
+    Matrix operator - ();
 
     Matrix operator += (const Matrix &other);
     Matrix operator + (const Matrix &other);
@@ -44,8 +44,7 @@ public:
     Matrix operator *= (const Matrix &other);
     Matrix operator * (const Matrix &other);
 
-    Matrix operator *= (const Vector &other);
-    Matrix operator * (const Vector &other);
+    Vector operator * (const Vector &other);
 
     Matrix operator -= (const Matrix &other);
     Matrix operator - (const Matrix &other);
