@@ -106,15 +106,6 @@ bool Vector::OutOfRange(int i) const {
     return i < 0 || i >= n_;
 }
 
-Vector Vector::operator +()
-{}
-
-Vector Vector::operator -() {
-    for (int i = 0; i < n_; ++i) {
-        elements_[i] = -elements_[i];
-    }
-}
-
 Vector Vector::operator +=(const Vector &other) {
     if (n_ != other.n_) {
         throw std::runtime_error("Vector sizes dont match");
@@ -139,7 +130,7 @@ Vector Vector::operator -=(const Vector &other) {
     return *this;
 }
 
-Vector Vector::operator +(const Vector &other) {
+Vector Vector::operator +(const Vector &other) const {
     Vector tmp(*this);
 
     tmp += other;
@@ -147,10 +138,24 @@ Vector Vector::operator +(const Vector &other) {
     return tmp;
 }
 
-Vector Vector::operator -(const Vector &other) {
+Vector Vector::operator -(const Vector &other) const {
     Vector tmp(*this);
 
     tmp -= other;
+
+    return tmp;
+}
+
+Vector Vector::operator +() const {
+    return *this;
+}
+
+Vector Vector::operator -() const {
+    Vector tmp(n_);
+
+    for (int i = 0; i < n_; ++i) {
+        tmp.elements_[i] = -elements_[i];
+    }
 
     return tmp;
 }

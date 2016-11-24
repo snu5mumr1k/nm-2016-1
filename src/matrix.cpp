@@ -24,7 +24,7 @@ Matrix::Matrix(int n, const double *elements) :
 }
 
 Matrix::Matrix(int n, const BaseElementGenerator &element_generator) :
-    Matrix(n)
+    n_(n)
 {
     elements_ = new double[n * n];
 
@@ -43,18 +43,6 @@ Matrix::~Matrix() {
     delete [] elements_;
 }
 
-Matrix &Matrix::operator =(const Matrix &other) {
-    if (this != &other) {
-        delete [] elements_;
-
-        n_ = other.n_;
-        elements_ = new double[n_ * n_];
-        memcpy(elements_, other.elements_, n_ * n_ * sizeof *elements_);
-    }
-
-    return *this;
-}
-
 void Matrix::Print(std::ofstream &fout) const {
     for (int i = 0; i < n_; ++i) {
         for (int j = 0; j < n_; ++j) {
@@ -62,6 +50,10 @@ void Matrix::Print(std::ofstream &fout) const {
         }
         fout << std::endl;
     }
+}
+
+bool Matrix::OutOfRange(int i) const {
+    return i < 0 || i >= n_;
 }
 
 int Matrix::Size() const {
@@ -103,6 +95,18 @@ void Matrix::AddRow(int dest, int src, double multiplier) {
     }
 }
 
+Matrix Matrix::Transpose() const {
+    Matrix tmp(n_);
+
+    for (int i = 0; i < n_; ++i) {
+        for (int j = 0; j < n_; ++j) {
+            tmp.elements_[i * n_ + j] = elements_[j * n_ + i];
+        }
+    }
+
+    return tmp;
+}
+
 double Matrix::Determinant(Pivoting use_pivoting) {
     Vector tmp(n_);
 
@@ -124,12 +128,30 @@ Matrix Matrix::Inverse(Pivoting use_pivoting) {
     return result;
 }
 
-const double *Matrix::operator [](int i) const {
-    if (OutOfRange(i)) {
-        throw std::runtime_error("Matrix index is out of range");
+Vector Matrix::SuccessiveOverRelaxation(const Vector &f, double rel_factor) const {
+    static const double CONVERGENCY_TRESHOLD = 1e-3;
+    static const int MAX_ITERATIONS_COUNT = 1e6;
+
+    if (n_ != f.Size()) {
+        throw std::runtime_error("Matrix and vector sizes dont match");
     }
 
-    return &elements_[i * n_];
+    Vector result(n_);
+    double residual = 0.0;
+    int iterations_count = 0;
+    do {
+        for (int i = 0; i < n_; ++i) {
+            double sum = 0.0;
+            for (int j = 0; j < n_; ++j) {
+                sum += elements_[i * n_ + j] * result[j];
+            }
+            result[i] = result[i] + rel_factor * (f[i] - sum) / elements_[i * n_ + i];
+        }
+        residual = (*this * result - f).EuclideanNorm();
+        iterations_count++;
+    } while (residual > CONVERGENCY_TRESHOLD && iterations_count < MAX_ITERATIONS_COUNT);
+
+    return result;
 }
 
 int Matrix::ChooseRow(int curr_row, Pivoting use_pivoting) {
@@ -188,17 +210,24 @@ double Matrix::GaussianElimination(BaseRightEquationsSystemPart &right_part, Piv
     return determinant;
 }
 
-bool Matrix::OutOfRange(int i) const {
-    return i < 0 || i >= n_;
+const double *Matrix::operator [](int i) const {
+    if (OutOfRange(i)) {
+        throw std::runtime_error("Matrix index is out of range");
+    }
+
+    return &elements_[i * n_];
 }
 
-Matrix Matrix::operator +()
-{}
+Matrix &Matrix::operator =(const Matrix &other) {
+    if (this != &other) {
+        delete [] elements_;
 
-Matrix Matrix::operator -() {
-    for (int i = 0; i < n_; ++i) {
-        elements_[i] = -elements_[i];
+        n_ = other.n_;
+        elements_ = new double[n_ * n_];
+        memcpy(elements_, other.elements_, n_ * n_ * sizeof *elements_);
     }
+
+    return *this;
 }
 
 Matrix Matrix::operator +=(const Matrix &other) {
@@ -235,21 +264,21 @@ Matrix Matrix::operator *=(const Matrix &other) {
     return *this;
 }
 
-Matrix Matrix::operator +(const Matrix &other) {
+Matrix Matrix::operator +(const Matrix &other) const {
     Matrix tmp(*this);
 
     tmp += other;
     return tmp;
 }
 
-Matrix Matrix::operator -(const Matrix &other) {
+Matrix Matrix::operator -(const Matrix &other) const {
     Matrix tmp(*this);
 
     tmp -= other;
     return tmp;
 }
 
-Matrix Matrix::operator *(const Matrix &other) {
+Matrix Matrix::operator *(const Matrix &other) const {
     if (n_ != other.n_) {
         throw std::runtime_error("Matrices sizes dont match");
     }
@@ -267,7 +296,7 @@ Matrix Matrix::operator *(const Matrix &other) {
     return tmp;
 }
 
-Vector Matrix::operator *(const Vector &other) {
+Vector Matrix::operator *(const Vector &other) const {
     if (n_ != other.Size()) {
         throw std::runtime_error("Matrix and vector sizes dont match");
     }
@@ -279,5 +308,19 @@ Vector Matrix::operator *(const Vector &other) {
             tmp[i] += elements_[i * n_ + j] * other[j];
         }
     }
+    return tmp;
+}
+
+Matrix Matrix::operator +() const {
+    return *this;
+}
+
+Matrix Matrix::operator -() const {
+    Matrix tmp(n_);
+
+    for (int i = 0; i < n_; ++i) {
+        tmp.elements_[i] = -elements_[i];
+    }
+
     return tmp;
 }

@@ -17,6 +17,9 @@ public:
     double Determinant(Pivoting use_pivoting = DONT_USE_PIVOTING) const;
     Matrix Inverse(Pivoting use_pivoting = DONT_USE_PIVOTING) const;
 
+    Vector SuccessiveOverRelaxation(double rel_factor) const;
+    double RelaxationResidual(double rel_factor) const;
+
 private:
     Matrix *coefficients_;
     Vector *constants_;

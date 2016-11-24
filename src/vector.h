@@ -28,14 +28,14 @@ public:
 
     bool OutOfRange(int i) const;
 
-    Vector operator +();
-    Vector operator -();
 
     Vector operator +=(const Vector &other);
-    Vector operator +(const Vector &other);
-
     Vector operator -=(const Vector &other);
-    Vector operator -(const Vector &other);
+
+    Vector operator +(const Vector &other) const;
+    Vector operator -(const Vector &other) const;
+    Vector operator +() const;
+    Vector operator -() const;
 
 private:
     int n_;

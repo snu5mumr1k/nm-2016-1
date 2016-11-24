@@ -1,5 +1,7 @@
-#include <fstream>
+#include <cmath>
 #include <equations_system.h>
+#include <fstream>
+#include <utils.h>
 
 EquationsSystem::EquationsSystem(const std::string &filename) {
     std::fstream file(filename);
@@ -57,4 +59,22 @@ Matrix EquationsSystem::Inverse(Pivoting use_pivoting) const {
     Matrix tmp(*coefficients_);
 
     return tmp.Inverse(use_pivoting);
+}
+
+Vector EquationsSystem::SuccessiveOverRelaxation(double rel_factor = 1.0) const {
+    Matrix tmp_matrix = coefficients_->Transpose() * *coefficients_;
+    Vector tmp_vector = coefficients_->Transpose() * *constants_;
+
+    return tmp_matrix.SuccessiveOverRelaxation(tmp_vector, rel_factor);
+}
+
+double EquationsSystem::RelaxationResidual(double rel_factor = 1.0) const {
+    Vector result = SuccessiveOverRelaxation(rel_factor);
+
+    if (std::isnan(result[0])) {
+        return std::nan("");
+    }
+
+    Vector residual_vector = *coefficients_ * result - *constants_;
+    return residual_vector.EuclideanNorm();
 }

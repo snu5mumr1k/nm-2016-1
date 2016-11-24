@@ -38,23 +38,9 @@ def generate(n, m, x):
     return A, b
 
 
-def equal(arr1, arr2):
-    if len(arr1) != len(arr2):
-        return False
-
-    if np.isnan(arr1[0]) and np.isnan(arr2[0]):
-        return True
-
-    for i in range(len(arr1)):
-        if math.fabs(arr1[i] - arr2[i]) > EPS:
-            return False
-
-    return True
-
-
 def check_solution(systems, filename):
     fin = open(file=filename, mode="r")
-    solutions = np.array([list(map(float, s.split())) for s in fin.readlines()])
+    solutions = np.array([np.array(list(map(float, s.split()))) for s in fin.readlines()])
     fin.close()
     print("Running small tests")
     all_passed = True
@@ -62,7 +48,7 @@ def check_solution(systems, filename):
     for i in range(len(systems["small_tests"])):
         print(i, "test ", end='')
         A, b = systems["small_tests"][i]
-        if np.linalg.norm(A.dot(solutions[i]) - b) > EPS:
+        if np.linalg.norm(A.dot(solutions[i]) - b) > EPS or np.isnan(solutions[i]).any():
             all_passed = False
             print("failed -")
         else:
@@ -81,7 +67,7 @@ def check_solution(systems, filename):
     for i in range(len(systems["big_tests"])):
         print(i, "test ", end='')
         A, b = systems["big_tests"][i]
-        if np.linalg.norm(A.dot(solutions[i + len_small]) - b) > EPS:
+        if np.linalg.norm(A.dot(solutions[i + len_small]) - b) > EPS or np.isnan(solutions[i]).any():
             all_passed = False
             print("failed -")
         else:
@@ -101,13 +87,13 @@ if __name__ == "__main__":
         "big_tests": []}
 
     fin = open(file="data/inputs_small", mode="r")
-    for filename in map(lambda x: x.strip(), fin.readlines()):
+    for filename in map(lambda x: x.split()[0].strip(), fin.readlines()):
         systems["small_tests"].append(system_from_file(filename))
     fin.close()
 
     fin = open(file="data/inputs_big", mode="r")
     n, M = map(int, fin.readline().split())
-    for x in map(float, fin.readlines()):
+    for x in map(lambda line: float(line.split()[0]), fin.readlines()):
         A, b = generate(n, M, x)
         systems["big_tests"].append((A, b))
     fin.close()
@@ -116,3 +102,5 @@ if __name__ == "__main__":
     check_solution(systems, "data/gauss_out")
     print("Gauss method with pivoting:")
     check_solution(systems, "data/gauss_pivot_out")
+    print("Successive over-relaxation:")
+    check_solution(systems, "data/relaxation_out")

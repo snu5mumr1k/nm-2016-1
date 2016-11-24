@@ -19,9 +19,8 @@ public:
 
     ~Matrix();
 
-    Matrix &operator =(const Matrix &other);
-
     void Print(std::ofstream &fout) const;
+    bool OutOfRange(int i) const;
     int Size() const;
 
     void SetNaN();
@@ -29,26 +28,29 @@ public:
     void MultiplyRow(int i, double multiplier);
     void AddRow(int dest, int src, double multiplier);
 
+    Matrix Transpose() const;
+
     double Determinant(Pivoting use_pivoting = DONT_USE_PIVOTING);
     Vector Solve(const Vector &v, Pivoting use_pivoting = DONT_USE_PIVOTING);
     Matrix Inverse(Pivoting use_pivoting = DONT_USE_PIVOTING);
 
+    Vector SuccessiveOverRelaxation(const Vector &f, double rel_factor) const;
+
     const double *operator [](int i) const;
-    bool OutOfRange(int i) const;
 
-    Matrix operator + ();
-    Matrix operator - ();
-
+    Matrix &operator =(const Matrix &other);
     Matrix operator += (const Matrix &other);
-    Matrix operator + (const Matrix &other);
-
-    Matrix operator *= (const Matrix &other);
-    Matrix operator * (const Matrix &other);
-
-    Vector operator * (const Vector &other);
-
     Matrix operator -= (const Matrix &other);
-    Matrix operator - (const Matrix &other);
+    Matrix operator *= (const Matrix &other);
+
+    Matrix operator + (const Matrix &other) const;
+    Matrix operator - (const Matrix &other) const;
+    Matrix operator * (const Matrix &other) const;
+
+    Vector operator * (const Vector &other) const;
+
+    Matrix operator + () const;
+    Matrix operator - () const;
 
 private:
     int n_;
