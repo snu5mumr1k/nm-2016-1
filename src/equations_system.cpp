@@ -40,7 +40,7 @@ Vector EquationsSystem::Solve(Pivoting use_pivoting) const {
 }
 
 double EquationsSystem::Residual(Pivoting use_pivoting) const {
-    Vector result = Solve();
+    Vector result = Solve(use_pivoting);
 
     Vector residual_vector = *coefficients_ * result - *constants_;
 

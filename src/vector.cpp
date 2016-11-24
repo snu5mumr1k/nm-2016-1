@@ -77,13 +77,13 @@ void Vector::AddRow(int dest, int src, double coef) {
 }
 
 double Vector::EuclideanNorm() const {
-    double norm = 0.0;
+    double norm_sqr = 0.0;
 
     for (int i = 0; i < n_; ++i) {
-        norm += elements_[i] * elements_[i];
+        norm_sqr += elements_[i] * elements_[i];
     }
 
-    return norm;
+    return sqrt(norm_sqr);
 }
 
 double Vector::operator [](int i) const {
